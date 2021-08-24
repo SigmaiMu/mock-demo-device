@@ -1,6 +1,6 @@
 # <h1> Game Types:
 
-# H2 CSGO style
+# <h5> CSGO style
 
 # H2 Bomb and key generation, split with attack defense scenario
 
