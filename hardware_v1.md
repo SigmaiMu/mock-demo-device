@@ -7,5 +7,4 @@
 - [ ] arduino nano
 - [ ] AA caddy / LiPo combination
 - [ ] Cards & reader
-
 - [ ] Pyro?
