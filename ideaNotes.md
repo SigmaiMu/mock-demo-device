@@ -1,4 +1,4 @@
-# H1 Game Types:
+# <h1> Game Types:
 
 # H2 CSGO style
 
