@@ -1,11 +1,11 @@
 # <h1> Game Types:
 # <h5> CSGO style
 # <h5> Bomb and key generation, split with attack defense scenario
-# <h5> Heist
-* Terrorist team use bomb as diversion whilst terrorists search for valuable items
-* Multiple key cards
-* 50% have cards, 80% cards needed for defusing
-* Time taken per card use affects total cards needed
+# <h5> Heist:
+    - Terrorist team use bomb as diversion whilst terrorists search for valuable items
+     - Multiple key cards
+     - 50% have cards, 80% cards needed for defusing
+     - Time taken per card use affects total cards needed
 # <h5> TTT
 # <h1> Arm-Disarm Methods:
     - all:
