@@ -8,13 +8,13 @@
      - Time taken per card use affects total cards needed
 # <h5> TTT
 # <h1> Arm-Disarm Methods:
-    - all:
-        continuity enforcement for arming
-        incorrect digit penalty
-    - Type in given code
-    - 'Pavlov' style live-code typing
-    - Simple math operation for each digit 
-        ie (4+2)(...)...
+# <h5> all:
+    - continuity enforcement for arming
+    - incorrect digit penalty
+# <h5> Type in given code
+# <h5> 'Pavlov' style live-code typing
+# <h5> Simple math operation for each digit 
+    - ie (4+2)(...)...
 
 # H1 Sites and site ideas:
     - Courtrooms
