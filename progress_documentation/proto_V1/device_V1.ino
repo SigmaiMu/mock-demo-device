@@ -12,8 +12,10 @@ int countDownEnd = 0;
 int startMillis = 0;
 int timeArmed = 0;
 int timeRemaining = 0;
+int keyPressedTime = 0;
 
 bool exploded = false;
+bool defused = false;
 
 char countdown[10];
 
@@ -73,6 +75,19 @@ void armedScreen(char currentKey, String keysPressed, int timeRemaining) {
 }
 
 
+char* generateKeys() {
+  
+  static char keysGenerated[8];
+  for (int i=0;i<=7;i++) {
+    randomSeed(analogRead(0));
+    char key = random(49, 52);
+    keysGenerated[i] = key;
+  }
+  return keysGenerated;
+
+}
+
+
 void loop() {
 
   bool armed = digitalRead(buttonPin);
@@ -81,27 +96,46 @@ void loop() {
 
   timeArmed = getTime();
   char keysPressed[] = "00000000";
-  char keysNeeded[] = "12321321";
+  char* keysNeeded = generateKeys();
   char keyNeeded;
   int currentDigit = 0;
 
-  while (armed and not exploded) {
+  while (armed and not exploded and not defused) {
     armed = digitalRead(buttonPin);
+
     if (not cleared) {
       lcd.clear();
       cleared = true;
     }
 
-    if (not exploded) {
+    if (not exploded and not defused) {
       armed = digitalRead(buttonPin);
       timeRemaining = (countDownStart - (getTime() - timeArmed));
       
       char keyPressed = myKeypad.getKey();
       keyNeeded = keysNeeded[currentDigit];
+
       if (keyPressed) {
-        keysPressed[currentDigit] = keyPressed;
-        currentDigit ++;
+
+        keyPressedTime = getTime();
+
+        if (keyPressed == keyNeeded) {
+          keysPressed[currentDigit] = keyPressed;
+          currentDigit ++;
+        }
+        else if ((keyPressed != keyNeeded)) {
+          memcpy(keysPressed, "00000000", 8);
+          currentDigit = 0;
+        }
       }
+
+      bool continuityCondition = (getTime() - keyPressedTime) <= 1;
+
+      if (not continuityCondition) {
+        memcpy(keysPressed, "00000000", 8);
+        currentDigit = 0;
+      }
+
       armedScreen(keyNeeded, keysPressed, timeRemaining);
 
       int i;
@@ -118,7 +152,7 @@ void loop() {
         lcd.setCursor(5, 0);
         lcd.print("DEFUSED");
         delay(2000);
-        exploded = true;
+        defused = true;
       }
 
       if (timeRemaining == countDownEnd) {
@@ -135,6 +169,7 @@ void loop() {
   if (reset) {
     lcd.clear();
     exploded = false;
+    defused = false;
   }
 
   lcd.setCursor(0, 0);
