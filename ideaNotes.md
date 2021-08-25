@@ -1,6 +1,6 @@
 # <h1> Game Types:
 # <h5> CSGO style
-# <h5> Bomb and key generation, split with attack defense scenario
+# <h5> Split Bomb and key generation on seperate devices, with attack defense scenario
 # <h5> Heist:
     - Terrorist team use bomb as diversion whilst terrorists search for valuable items
     - Multiple key cards
