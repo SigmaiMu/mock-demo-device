@@ -1,7 +1,6 @@
 #include <LiquidCrystal.h>
 #include <Keypad.h>
 #include <string.h>
-#include <RTClib.h>
 
 
 //GLOBAL VARIABLES
@@ -10,12 +9,13 @@ const int digitCount = 5;
 const int countDownTime = 30;
 char emptyHashString[digitCount + 1];
 char keysPressedString[digitCount +1];
-const int screenRefreshTime = 150;
+const int screenRefreshTime = 200;
 char keyNeeded;
 char keyPressed;
 int currentKey;
 int keyPressedTime;
 int timeArmed;
+int passes;
 
 bool primed = false;
 bool armed = false;
@@ -80,7 +80,7 @@ int getTime() {
 }
 
 
-void beep(int beeps, int beepLowDelay = 100, int beepHighDelay = 100) {
+void beep(int beeps, int beepLowDelay = 80, int beepHighDelay = 80) {
   for (int i=0; i<beeps; i++) {
     digitalWrite(speaker, HIGH);
     delay(beepHighDelay);
@@ -88,6 +88,15 @@ void beep(int beeps, int beepLowDelay = 100, int beepHighDelay = 100) {
     delay(beepLowDelay);
   }
   return;
+}
+
+
+void secondBeep() {
+    passes++;
+    if (passes==(1000/screenRefreshTime)) {
+        beep(1);
+        passes = 0;
+    }
 }
 
 
@@ -237,6 +246,7 @@ while (primed and not armed) {
 while (armed and primed) {
     int timeRemaining = (countDownTime - getTime() + timeArmed);
     armedScreen(timeRemaining);
+    secondBeep();
     keyPressed = myKeypad.getKey();
     keyNeeded = keysNeeded[currentKey];
 
@@ -265,14 +275,20 @@ while (armed and primed) {
         lcd.setCursor(0,0);
         char defused[] = "defused";
         lcd.print(defused);
-        delay(60000);
+        beep(3, 400, 400);
+        delay(5000);
+        armed = false;
+        primed = false;
     }
     else if (timeRemaining == 0) {
         lcd.clear();
         lcd.setCursor(0,0);
         char boom[] = "boom";
         lcd.print(boom);
-        delay(60000);
+        beep(50, 50, 50);
+        delay(5000);
+        armed = false;
+        primed = false;
     }
     delay(screenRefreshTime);
 }
