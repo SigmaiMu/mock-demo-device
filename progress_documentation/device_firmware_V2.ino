@@ -5,7 +5,7 @@
 
 //GLOBAL VARIABLES
 
-const int digitCount = 5;
+const int digitCount = 10;
 const int countDownTime = 30;
 char emptyHashString[digitCount + 1];
 char keysPressedString[digitCount +1];
@@ -26,12 +26,12 @@ bool reset = false;
 // REDLED       D9
 // GREEN LED    D10
 // PRIMER       D13
-const int speaker = 7;
-const int redLED = 9;
-const int greenLED = 10;
+const int speaker = 6;
+const int redLED = 8;
+const int greenLED = 7;
 const int primer = 13;
 
-const int inputPins[] = {primer};
+const int inputPins[] = {primer, A0, A1, A2, A3, A4, A5};
 const int outputPins[] = {speaker, redLED, greenLED};
 
 //LIQUID CRYSTAL
@@ -61,14 +61,14 @@ LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 // ROW3     A3
 // COLUMN1  A0
 const byte numRows = 3;
-const byte numCols = 1;
+const byte numCols = 3;
 char keymap[numRows][numCols] = {
-  {'1'},
-  {'2'},
-  {'3'}
+  {'1', '2', '3'},
+  {'3', '4', '5'},
+  {'4', '5', '6'}
 };
-byte rowPins[numRows] = {A1, A2, A3};
-byte colPins[numCols]= {A0};
+byte rowPins[numRows] = {A0, A1, A2};
+byte colPins[numCols]= {A3, A4, A5};
 Keypad myKeypad= Keypad(makeKeymap(keymap), rowPins, colPins, numRows, numCols);
 //-----
 
@@ -123,12 +123,12 @@ void initializePins() {
 
 void mainScreen() {
     char title[] = "AIRSOC REPLICA";
-    char state[] = "unprimed";
+    //char state[] = "unprimed";
     lcd.clear();
     lcd.setCursor(0,0);
     lcd.print(title);
-    lcd.setCursor(0,1);
-    lcd.print(state);
+    //lcd.setCursor(0,1);
+    //lcd.print(state);
     return;
 }
 
@@ -177,7 +177,7 @@ char *generateKeys() {
   static char keysGenerated[digitCount];
   for (int i=0; i<digitCount; i++) {
     randomSeed(analogRead(0));
-    char key = random(49, 52);
+    char key = random(49, 58);
     keysGenerated[i] = key;
   }
   return keysGenerated;
@@ -189,10 +189,10 @@ char *generateKeys() {
 void setup() {
 
     int startMillis = getTime();
-    lcd.begin(16, 2);
     createEmptyHashString();
     resetKeys();
     initializePins();
+    digitalWrite(greenLED, HIGH);
     beep(3);
 
 }
@@ -235,6 +235,7 @@ while (primed and not armed) {
     if (keyCheck) {
         resetKeys();
         timeArmed = getTime();
+        digitalWrite(redLED, HIGH);
         armed = true;
     }
 
@@ -276,7 +277,7 @@ while (armed and primed) {
         char defused[] = "defused";
         lcd.print(defused);
         beep(3, 400, 400);
-        delay(5000);
+        delay(10000);
         armed = false;
         primed = false;
     }
@@ -286,7 +287,7 @@ while (armed and primed) {
         char boom[] = "boom";
         lcd.print(boom);
         beep(50, 50, 50);
-        delay(5000);
+        delay(10000);
         armed = false;
         primed = false;
     }
